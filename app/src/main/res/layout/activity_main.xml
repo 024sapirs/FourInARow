@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<GridLayout
+android:id="@+id/main"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:rowCount="6"
+android:columnCount="7"
+android:layout_gravity="center"
+
+
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+<!-- 9 ImageViews for the board -->
+    <ImageView
+        android:id="@+id/iv00"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="00"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+
+    <ImageView
+        android:id="@+id/iv01"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="01"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv02"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="02"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv03"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="03"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv04"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="04"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv05"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="05"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv06"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="06"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+
+    <ImageView
+        android:id="@+id/iv10"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="10"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+
+    <ImageView
+        android:id="@+id/iv11"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="11"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv12"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="12"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv13"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="13"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv14"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="14"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv15"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="15"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv16"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="16"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+
+    <ImageView
+        android:id="@+id/iv20"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="20"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+
+    <ImageView
+        android:id="@+id/iv21"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="21"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv22"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="22"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv23"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="23"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv24"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="24"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv25"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="25"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv26"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="26"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+
+    <ImageView
+        android:id="@+id/iv30"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="30"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+
+    <ImageView
+        android:id="@+id/iv31"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="31"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv32"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="32"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv33"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="33"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv34"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="34"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv35"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="35"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv36"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="36"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv40"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="40"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+
+    <ImageView
+        android:id="@+id/iv41"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="41"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv42"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="42"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv43"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="43"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv44"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="44"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv45"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="45"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv46"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="46"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv50"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="50"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+
+    <ImageView
+        android:id="@+id/iv51"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="51"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv52"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="52"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv53"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="53"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv54"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="54"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv55"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="55"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    <ImageView
+        android:id="@+id/iv56"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tag="56"
+        android:onClick="onCellClick"
+        android:src="@drawable/hollow_square_blue"
+        android:text="" />
+    
+
+
+</GridLayout>
