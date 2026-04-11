@@ -7,53 +7,117 @@ public class Game {
 
 
     public static final int EMPTY = 0;
-    public static final int PLAYER_X = 1;
-    public static final int PLAYER_O = -1;
+    public static final int PLAYER_RED = 1;
+    public static final int PLAYER_YELLOW = -1;
+
+    public static final int COLS = 7;
+    public static final int ROWS = 6;
 
     private int[][] board;
     private int currentPlayer;
 
     public Game() {
-        board = new int[3][3];
-        currentPlayer = PLAYER_X;
+        board = new int[ROWS][COLS];
+        currentPlayer = PLAYER_RED;
     }
 
     public int getCurrentPlayer() {
+
         return currentPlayer;
     }
 
-    public boolean isLegal(int row, int col) {
-        return board[row][col] == EMPTY;
+    public boolean isLegal(int col) {
+
+        return board[0][col] == EMPTY;
     }
 
-    public boolean makeMove(int row, int col) {
-        if (!isLegal(row, col)) return false;
-        board[row][col] = currentPlayer;
-        return true;
+    public int getEmptyRow (int col) {
+        int emptyRow = 0;
+        while (emptyRow+1 < ROWS && board[emptyRow+1][col] == EMPTY) {
+            emptyRow += 1;
+        }
+        return emptyRow;
     }
+    public int makeMove(int col) {
+        if (!isLegal(col)) return -1;
+        int row = getEmptyRow(col);
+
+        board[row][col] = currentPlayer;
+        return row;
+    }
+
 
     public void changePlayer() {
-        currentPlayer = (currentPlayer == PLAYER_X) ? PLAYER_O : PLAYER_X;
+        if(currentPlayer == PLAYER_RED)
+            currentPlayer = PLAYER_YELLOW;
+        else
+            currentPlayer = PLAYER_RED;
     }
 
     public int checkWin() {
-        // Returns PLAYER_X, PLAYER_O, or EMPTY (no winner)
-        // Implement row, col, diagonal checks
-        // (see below for example)
-        for(int i=0; i<3; i++) {
-            if (board[i][0] == board[i][1] && board[i][0] == board[i][2] && board[i][0] != EMPTY) {
-                return board[i][0];
+        // Returns PLAYER_RED, PLAYER_YELLOW, or EMPTY (no winner)
+        int seq;
+        int prev;
+        for (int col = 0; col<COLS; col++) {
+            seq=0;
+            prev=EMPTY;
+            for (int row = 0; row<ROWS; row++) {
+                if(board[row][col]==EMPTY)
+                    seq = 0;
+                else {
+                    if(board[row][col]==prev)
+                        seq+=1;
+                    else
+                        seq=1;
+                    prev=board[row][col];
+                }
+                if (seq==4)
+                    return prev;
             }
-            if (board[0][i] == board[1][i] && board[0][i] == board[2][i] && board[0][i] != EMPTY) {
-                return board[0][i];
+        }
+
+        for (int row = 0; row<ROWS; row++) {
+            seq=0;
+            prev=EMPTY;
+            for (int col = 0; col<COLS; col++) {
+                if(board[row][col]==EMPTY)
+                    seq = 0;
+                else {
+                    if(board[row][col]==prev)
+                        seq+=1;
+                    else
+                        seq=1;
+                    prev=board[row][col];
+                }
+                if (seq==4)
+                    return prev;
             }
         }
-        if(board[0][0]==board[1][1] && board[0][0]==board[2][2]&&board[0][0]!=EMPTY){
-            return board[0][0];
+
+        for (int row = 0; row < ROWS - 3; row++) {
+            for (int col = 0; col < COLS - 3; col++) {
+                int current = board[row][col];
+                if (current != EMPTY &&
+                        current == board[row + 1][col + 1] &&
+                        current == board[row + 2][col + 2] &&
+                        current == board[row + 3][col + 3]) {
+                    return current;
+                }
+            }
         }
-        if(board[0][2]==board[1][1] && board[0][2]==board[2][0]&&board[0][2]!=EMPTY){
-            return board[0][2];
+
+        for (int row = 3; row < ROWS; row++) {
+            for (int col = 0; col < COLS - 3; col++) {
+                int current = board[row][col];
+                if (current != EMPTY &&
+                        current == board[row - 1][col + 1] &&
+                        current == board[row - 2][col + 2] &&
+                        current == board[row - 3][col + 3]) {
+                    return current;
+                }
+            }
         }
+
         return EMPTY;
     }
 
@@ -69,61 +133,53 @@ public class Game {
 
         return checkWin()==EMPTY;
     }
-    public ArrayList<Move> getPossibleMoves() {
-        ArrayList<Move> moves = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board[i][j] == EMPTY) {
-                    moves.add(new Move(i, j));
-                }
+    public ArrayList<Integer> getPossibleMoves() {
+        ArrayList<Integer> moves = new ArrayList<>();
+
+        for (int col = 0; col < COLS; col++) {
+            if (board[0][col] == EMPTY) {
+                moves.add(col);
             }
         }
+
         return moves;
     }
-    public Move getRandomMove() {
-        ArrayList<Move> moves = getPossibleMoves();
-        if (moves.isEmpty()) return null; // No moves left
+    public int getRandomMove() {
+        ArrayList<Integer> moves = getPossibleMoves();
+        if (moves.isEmpty()) return -1; // No moves left
         Random rand = new Random();
         return moves.get(rand.nextInt(moves.size()));
     }
-    public Move getHeuristicMove(int aiPlayer, int humanPlayer) {
-        // 1. Win if possible
-        for (Move move : getPossibleMoves()) {
-            board[move.row][move.col] = aiPlayer;
+    public int getHeuristicMove(int aiPlayer, int humanPlayer) {
+        //  Win if possible
+        for (int move : getPossibleMoves()) {
+            int row = getEmptyRow(move);
+            board[row][move] = aiPlayer;
             if (checkWin() == aiPlayer) {
-                board[move.row][move.col] = EMPTY;
+                board[row][move] = EMPTY;
                 return move;
             }
-            board[move.row][move.col] = EMPTY;
+            board[row][move] = EMPTY;
         }
-        // 2. Block if needed
-        for (Move move : getPossibleMoves()) {
-            board[move.row][move.col] = humanPlayer;
+        //  Block if needed
+        for (int move : getPossibleMoves()) {
+            int row = getEmptyRow(move);
+            board[row][move] = humanPlayer;
             if (checkWin() == humanPlayer) {
-                board[move.row][move.col] = EMPTY;
+                board[row][move] = EMPTY;
                 return move;
             }
-            board[move.row][move.col] = EMPTY;
+            board[row][move] = EMPTY;
         }
-        // 3. Take center
-        if (board[1][1] == EMPTY)
-            return new Move(1, 1);
-
-        // 4. Take a corner
-        int[][] corners = {{0,0}, {0,2}, {2,0}, {2,2}};
-        for (int[] c : corners)
-            if (board[c[0]][c[1]] == EMPTY)
-                return new Move(c[0], c[1]);
-
-        // 5. Otherwise, pick random
         return getRandomMove();
+        //strategy
     }
 
     public void resetGame() {
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j < 3; j++)
-                board[i][j] = EMPTY;
-        currentPlayer = PLAYER_X;
+        for (int col = 0; col<COLS; col++) 
+            for (int row = 0; row<ROWS; row++) 
+                board[row][col] = EMPTY;
+        currentPlayer = PLAYER_RED;
     }
 }
 
@@ -134,4 +190,4 @@ public class Game {
 
 
 
-}
+
