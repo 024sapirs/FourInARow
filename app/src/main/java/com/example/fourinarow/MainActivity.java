@@ -53,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
         if (winner != game.EMPTY) {
             String msg;
             if (winner == game.PLAYER_RED) {
-                msg = "X won!";
+                msg = "RED won!";
             } else {
-                msg = "O won!";
+                msg = "YELLOW won!";
             }
 
             new AlertDialog.Builder(this)
