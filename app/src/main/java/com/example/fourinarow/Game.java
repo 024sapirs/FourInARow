@@ -27,8 +27,7 @@ public class Game {
     }
 
     public boolean isLegal(int col) {
-
-        return board[0][col] == EMPTY;
+        return col >= 0 && col < COLS && board[0][col] == EMPTY;
     }
 
     public int getEmptyRow (int col) {
@@ -122,17 +121,19 @@ public class Game {
     }
 
     public boolean isTie() {
-        // If all cells filled and no winner
-        for (int i=0; i<3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if(board[i][j]==EMPTY) {
-                    return false;
-                }
+        if (checkWin() != EMPTY) {
+            return false;
+        }
+
+        for (int col = 0; col < COLS; col++) {
+            if (board[0][col] == EMPTY) {
+                return false;
             }
         }
 
-        return checkWin()==EMPTY;
+        return true;
     }
+
     public ArrayList<Integer> getPossibleMoves() {
         ArrayList<Integer> moves = new ArrayList<>();
 

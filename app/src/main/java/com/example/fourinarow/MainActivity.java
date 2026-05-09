@@ -11,12 +11,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import android.view.animation.AccelerateInterpolator;
+import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity {
 
     private Game game;
-    int aiPlayer = game.PLAYER_YELLOW;
-    int humanPlayer= game.PLAYER_RED;
+    int aiPlayer = Game.PLAYER_YELLOW;
+    int humanPlayer = Game.PLAYER_RED;
+    private boolean animationInProgress = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,29 +33,33 @@ public class MainActivity extends AppCompatActivity {
         game = new Game();
     }
 
-    public void resetGame(){
+    public void resetGame() {
         game.resetGame();
+
         GridLayout grid = findViewById(R.id.main);
         int childCount = grid.getChildCount();
 
-        System.out.println(childCount);
-
         for (int i = 0; i < childCount; i++) {
             View child = grid.getChildAt(i);
-            if (child instanceof ImageView) {
-                ImageView cell = (ImageView) child;
-                cell.setImageResource(R.drawable.hollow_square_blue);
+
+            if (child instanceof FrameLayout) {
+                FrameLayout cellFrame = (FrameLayout) child;
+                ImageView piece = (ImageView) cellFrame.getChildAt(1);
+
+                piece.setTranslationY(0f);
+                piece.setImageDrawable(null);
             }
         }
 
-
-
+        animationInProgress = false;
     }
-    public void endOfTurn(){
+    public boolean endOfTurn() {
         int winner = game.checkWin();
-        if (winner != game.EMPTY) {
+
+        if (winner != Game.EMPTY) {
             String msg;
-            if (winner == game.PLAYER_RED) {
+
+            if (winner == Game.PLAYER_RED) {
                 msg = "RED won!";
             } else {
                 msg = "YELLOW won!";
@@ -61,62 +68,123 @@ public class MainActivity extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setTitle("game over")
                     .setMessage(msg)
-                    .setPositiveButton("yay", null)
+                    .setPositiveButton("yay", (dialog, which) -> resetGame())
                     .show();
-            resetGame();
+
+            return false;
         } else if (game.isTie()) {
             new AlertDialog.Builder(this)
                     .setTitle("game over")
                     .setMessage("TIE")
-                    .setPositiveButton(":(", null) //
+                    .setPositiveButton(":(", (dialog, which) -> resetGame())
                     .show();
-            resetGame();
+
+            return false;
         } else {
             game.changePlayer();
+            return true;
+        }
+    }
+    private ImageView getPieceCell(int row, int col) {
+        GridLayout grid = findViewById(R.id.main);
+
+        int index = row * Game.COLS + col;
+
+        FrameLayout cellFrame = (FrameLayout) grid.getChildAt(index);
+
+        // child 0 = board image
+        // child 1 = piece image
+        return (ImageView) cellFrame.getChildAt(1);
+    }
+
+    private int getDrawableForPlayer(int player) {
+        if (player == Game.PLAYER_RED) {
+            return R.drawable.red_circle;
+        } else {
+            return R.drawable.yellow_circle;
         }
     }
 
 
     public void onCellClick(View view) {
+        if (animationInProgress) {
+            return;
+        }
+
         String tag = view.getTag().toString();
 
         int col = Character.getNumericValue(tag.charAt(1));
 
-        // 1 isEmpty
-        if(game.isLegal(col)){
-            int row=game.makeMove(col);
-            GridLayout grid = findViewById(R.id.main);
-            int index = row * game.COLS + col;
-            ImageView cell = (ImageView) grid.getChildAt(index);
-
-            if (game.getCurrentPlayer() == game.PLAYER_RED) {
-                cell.setImageResource(R.drawable.red_circle);
-            } else {
-                cell.setImageResource(R.drawable.yellow_circle);
-            }
-            endOfTurn();
-
-            if (game.getCurrentPlayer() == aiPlayer) {
-                int aiMove = game.getHeuristicMove(aiPlayer, humanPlayer);
-                row = game.makeMove(aiMove);
-
-
-
-                index = row * game.COLS + aiMove;
-                ImageView aiCell = (ImageView) grid.getChildAt(index);
-
-                if (aiPlayer == game.PLAYER_RED) {
-                    aiCell.setImageResource(R.drawable.red_circle);
-                } else {
-                    aiCell.setImageResource(R.drawable.yellow_circle);
-                }
-
-                endOfTurn();
-            }
-
+        if (!game.isLegal(col)) {
+            return;
         }
 
+        animationInProgress = true;
 
+        int player = game.getCurrentPlayer();
+        int row = game.makeMove(col);
 
+        animatePieceDrop(row, col, player, () -> {
+            boolean gameContinues = endOfTurn();
+
+            if (!gameContinues) {
+                animationInProgress = false;
+                return;
+            }
+
+            if (game.getCurrentPlayer() == aiPlayer) {
+                playAiTurn();
+            } else {
+                animationInProgress = false;
+            }
+        });
     }
+    private void playAiTurn() {
+        int aiMove = game.getHeuristicMove(aiPlayer, humanPlayer);
+
+        if (aiMove == -1) {
+            animationInProgress = false;
+            return;
+        }
+
+        int player = game.getCurrentPlayer();
+        int row = game.makeMove(aiMove);
+
+        animatePieceDrop(row, aiMove, player, () -> {
+            endOfTurn();
+            animationInProgress = false;
+        });
+    }
+
+    private void animatePieceDrop(int row, int col, int player, Runnable afterAnimation) {
+        ImageView piece = getPieceCell(row, col);
+
+        piece.setImageResource(getDrawableForPlayer(player));
+
+        int cellHeight = piece.getHeight();
+
+        if (cellHeight == 0) {
+            cellHeight = (int) (50 * getResources().getDisplayMetrics().density);
+        }
+
+        float startY = -cellHeight * (row + 1);
+
+        piece.setTranslationY(startY);
+
+        piece.animate()
+                .translationY(0f)
+                .setDuration(300 + row * 50L)
+                .setInterpolator(new AccelerateInterpolator())
+                .withEndAction(() -> {
+                    piece.setTranslationY(0f);
+
+                    if (afterAnimation != null) {
+                        afterAnimation.run();
+                    }
+                })
+                .start();
+    }
+
+
+
 }
