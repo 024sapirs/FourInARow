@@ -1,7 +1,9 @@
 package com.example.fourinarow;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
@@ -12,10 +14,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity {
-
     private Game game;
     int aiPlayer = Game.PLAYER_YELLOW;
     int humanPlayer = Game.PLAYER_RED;
@@ -32,19 +32,14 @@ public class MainActivity extends AppCompatActivity {
         });
         game = new Game();
     }
-
     public void resetGame() {
         game.resetGame();
-
-        GridLayout grid = findViewById(R.id.main);
-        int childCount = grid.getChildCount();
-
+        GridLayout piecesGrid = findViewById(R.id.piecesGrid);
+        int childCount = piecesGrid.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            View child = grid.getChildAt(i);
-
-            if (child instanceof FrameLayout) {
-                FrameLayout cellFrame = (FrameLayout) child;
-                ImageView piece = (ImageView) cellFrame.getChildAt(1);
+            View child = piecesGrid.getChildAt(i);
+            if (child instanceof ImageView) {
+                ImageView piece = (ImageView) child;
 
                 piece.setTranslationY(0f);
                 piece.setImageDrawable(null);
@@ -65,19 +60,36 @@ public class MainActivity extends AppCompatActivity {
                 msg = "YELLOW won!";
             }
 
-            new AlertDialog.Builder(this)
+            AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("game over")
                     .setMessage(msg)
-                    .setPositiveButton("yay", (dialog, which) -> resetGame())
-                    .show();
+                    .setPositiveButton("yay", (d, which) -> resetGame())
+                    .create();
+
+            dialog.show();
+
+            Window window = dialog.getWindow();
+
+            if (window != null) {
+                window.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                window.setDimAmount(0.3f);
+            }
 
             return false;
         } else if (game.isTie()) {
-            new AlertDialog.Builder(this)
+            AlertDialog dialog2 = new AlertDialog.Builder(this)
                     .setTitle("game over")
                     .setMessage("TIE")
                     .setPositiveButton(":(", (dialog, which) -> resetGame())
-                    .show();
+                    .create();
+            dialog2.show();
+
+            Window window = dialog2.getWindow();
+
+            if (window != null) {
+                window.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                window.setDimAmount(0.3f);
+            }
 
             return false;
         } else {
@@ -86,15 +98,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private ImageView getPieceCell(int row, int col) {
-        GridLayout grid = findViewById(R.id.main);
+        GridLayout piecesGrid = findViewById(R.id.piecesGrid);
 
         int index = row * Game.COLS + col;
 
-        FrameLayout cellFrame = (FrameLayout) grid.getChildAt(index);
-
-        // child 0 = board image
-        // child 1 = piece image
-        return (ImageView) cellFrame.getChildAt(1);
+        return (ImageView) piecesGrid.getChildAt(index);
     }
 
     private int getDrawableForPlayer(int player) {
